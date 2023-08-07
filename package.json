@@ -269,7 +269,8 @@
         "test-compile": "tsc -p ./",
         "lint": "eslint . --ext .ts,.tsx",
         "pretest": "tsc -p ./",
-        "test": "jest out/"
+        "test": "jest out/",
+        "pkg": "vsce package"
     },
     "devDependencies": {
         "@types/jest": "^25.2.3",
