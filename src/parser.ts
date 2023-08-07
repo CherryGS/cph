@@ -20,10 +20,10 @@ export const getProbSaveLocation = (srcPath: string): string => {
         .update(srcPath)
         .digest('hex')
         .substr(0);
-    const baseProbName = `.${srcFileName}_${hash}.prob`;
+    const baseProbName = `.${srcFileName}.prob.json`;
     const cphFolder = path.join(srcFolder, '.cph');
     if (savePreference && savePreference !== '') {
-        return path.join(savePreference, baseProbName);
+        return path.join(srcFolder, savePreference, baseProbName);
     }
     return path.join(cphFolder, baseProbName);
 };
@@ -34,7 +34,9 @@ export const getProblem = (srcPath: string): Problem | null => {
     let problem: string;
     try {
         problem = fs.readFileSync(probPath).toString();
-        return JSON.parse(problem);
+        let p : Problem = JSON.parse(problem);
+        p.srcPath = srcPath;
+        return p;
     } catch (err) {
         return null;
     }

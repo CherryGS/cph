@@ -21,6 +21,7 @@ import {
     getGoCommand,
 } from './preferences';
 import { Language, Problem } from './types';
+import { getProblem } from './parser';
 
 const oc = vscode.window.createOutputChannel('cph');
 
@@ -159,10 +160,6 @@ export const getProblemForDocument = (
     }
 
     const srcPath = document.fileName;
-    const probPath = getProbSaveLocation(srcPath);
-    if (!existsSync(probPath)) {
-        return undefined;
-    }
-    const problem: Problem = JSON.parse(readFileSync(probPath).toString());
-    return problem;
+    const p = getProblem(srcPath);
+    return p ? p : undefined;
 };
