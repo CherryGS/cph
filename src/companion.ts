@@ -19,6 +19,7 @@ import { getJudgeViewProvider } from './extension';
 import { words_in_text } from './utilsPure';
 import fs from 'fs';
 import { getEnableClassification } from './preferences';
+import { format } from 'util';
 
 const emptyResponse: CphEmptyResponse = { empty: true };
 let savedResponse: CphEmptyResponse | CphSubmitResponse = emptyResponse;
@@ -182,26 +183,39 @@ class ProblemInfo {
 export const getProblemInfo = (problem: Problem) => {
     const platform = getProblemPlatform(problem);
     const part = problem.url.split('/');
+    let tp = "", pid = "", plf = platform;
     if (platform == 'codeforces') {
         for (let i = 0; i < part.length; i++) {
             switch (part[i]) {
                 case 'contest':
-                    return new ProblemInfo(part[i], part[i + 1], platform);
+                    tp = part[i];
+                    pid = part[i+1];
+                    plf = platform;
+                    break;
                 case 'problemset':
-                    return new ProblemInfo(part[i], part[i + 2], platform);
+                    tp = part[i];
+                    pid = part[i+2];
+                    plf = platform;
+                    break;
                 case 'gym':
-                    return new ProblemInfo(part[i], part[i + 1], platform);
+                    tp = part[i];
+                    pid = part[i+1];
+                    plf = platform;
+                    break;
             }
         }
     } else if (platform == 'atcoder') {
         for (let i = 0; i < part.length; i++) {
             switch (part[i]) {
                 case 'contests':
-                    return new ProblemInfo(part[i], part[i + 1], platform);
+                    tp = part[i];
+                    pid = part[i+1];
+                    plf = platform;
+                    break;
             }
         }
     }
-    return new ProblemInfo('', '', platform);
+    return new ProblemInfo(tp, pid, plf);
 };
 
 export const getProblemStem = (problem: Problem) => {
